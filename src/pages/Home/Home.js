@@ -7,7 +7,8 @@ class Home extends React.Component{
     constructor(){
         super();
         this.state = {
-            monsters: []
+            monsters: [],
+            searchField: ''
         }
     }
     componentDidMount(){
@@ -15,16 +16,22 @@ class Home extends React.Component{
             .then(response => response.json())
             .then(users => this.setState({ monsters: users }));
     }
+
+    handleSearch = (event)=>{
+        this.setState({searchField:event.target.value})
+    }
    
     render(){
-        var {monsters} = this.state
+        
+        const {monsters,searchField } = this.state
+        const filteredMonsters = monsters.filter((monster) => monster.name.toLowerCase().includes(searchField.toLowerCase()))
         return(
             <>
             <div className='App'>
                 <h1>Monsters Rolodex</h1>
                
-                <p>{this.state.monsters.map(monster => monster.id)}</p>
-                <CardList monsters={monsters} />
+                <Search handleSearch={this.handleSearch} />
+                <CardList monsters={filteredMonsters} />
                 
             </div>
             </>
